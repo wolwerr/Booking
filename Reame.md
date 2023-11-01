@@ -26,13 +26,18 @@ This project allows users to manage bookings and date blocks for properties. It 
 - **Description:** Lombok is a Java library that automatically plugs into your editor and build tools, making Java code more concise by reducing boilerplate code for model/data objects, such as getters, setters, equals, hashCode, toString, and more.
 - [Official Documentation](https://projectlombok.org/)
 
-### Docker
+### 6. Docker
 - **Description:** Docker is a platform designed to make it easier to create, deploy, and run applications by using containers. Containers allow developers to package up an application with all the parts it needs, including libraries and other dependencies, and ship it all out as one package.
 - [Official Documentation](https://docs.docker.com/)
 
-### Docker Compose
+### 7. Docker Compose
 - **Description:** Docker Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a `docker-compose.yml` file to configure your application's services, and then start and run the entire app with a single `docker-compose up` command.
 - [Official Documentation](https://docs.docker.com/compose/)
+
+### 8. Java 17
+- **Description:** Java 17 is a long-term support (LTS) release of the Java programming language and computing platform. It brings several new features, enhancements, and performance improvements over its predecessors, ensuring more efficient and stable applications.
+- **Version:** 17 
+- [Official Documentation](https://docs.oracle.com/en/java/javase/17/)
 
 ## How to Run the Project
 

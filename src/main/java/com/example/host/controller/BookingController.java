@@ -4,11 +4,16 @@ import com.example.host.Exception.BookingNotFoundException;
 import com.example.host.Exception.OverlappingDatesException;
 import com.example.host.entities.Booking;
 import com.example.host.service.BookingService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -26,8 +31,23 @@ public class BookingController {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT); // 409 Conflict
     }
 
+    @ControllerAdvice
+    public static class GlobalExceptionHandler {
+        @ResponseStatus(HttpStatus.BAD_REQUEST)
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+            Map<String, String> errors = new HashMap<>();
+            ex.getBindingResult().getAllErrors().forEach((error) -> {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            });
+            return errors;
+        }
+    }
+
     @PostMapping
-    public ResponseEntity<Object> createBooking(@RequestBody Booking booking) {
+    public ResponseEntity<Object> createBooking(@Valid @RequestBody Booking booking) {
         try {
             Booking newBooking = bookingService.createBooking(booking);
             return new ResponseEntity<>(newBooking, HttpStatus.CREATED);
