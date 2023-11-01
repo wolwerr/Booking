@@ -2,10 +2,8 @@ package com.example.host.entities;
 
 
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
-
 
 public class BlockTest {
 
@@ -69,27 +67,5 @@ public class BlockTest {
 
         assertNotEquals(block1, block2);
     }
-
-
-    // Block object is created with null reason and throws exception
-//    @Test
-//    public void test_block_creation_with_null_reason() {
-//        Long id = 1L;
-//        LocalDate startDate = LocalDate.now();
-//        LocalDate endDate = LocalDate.now().plusDays(1);
-//
-//        assertThrows(NullPointerException.class, () -> new Block(id, startDate, endDate, null));
-//    }
-//
-//    // Block object is created with start date after end date and throws exception
-//    @Test
-//    public void test_block_creation_with_start_date_after_end_date() {
-//        Long id = 1L;
-//        LocalDate startDate = LocalDate.now().plusDays(1);
-//        LocalDate endDate = LocalDate.now();
-//        String reason = "Valid Reason";
-//
-//        assertThrows(IllegalArgumentException.class, () -> new Block(id, startDate, endDate, reason));
-//    }
 
 }

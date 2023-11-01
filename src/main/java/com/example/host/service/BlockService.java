@@ -18,7 +18,7 @@ public class BlockService {
 
     private final OverlapValidationService overlapService;
 
-    public Block createBlock(Block block) throws OverlappingDatesException, NullPointerException  {
+    public Block createBlock(Block block) throws OverlappingDatesException, NullPointerException, IllegalArgumentException  {
 
         if (block.getStartDate() == null ) {
             throw new NullPointerException ("Start date cannot be null.");
@@ -42,7 +42,7 @@ public class BlockService {
         return blockRepository.save(block);
     }
 
-    public Block updateBlock(Long id, Block updatedBlock) throws BlockNotFoundException, OverlappingDatesException, NullPointerException  {
+    public Block updateBlock(Long id, Block updatedBlock) throws BlockNotFoundException, OverlappingDatesException, NullPointerException, IllegalArgumentException  {
         Block existingBlock = blockRepository.findById(id)
                 .orElseThrow(() -> new BlockNotFoundException("Block not found."));
 

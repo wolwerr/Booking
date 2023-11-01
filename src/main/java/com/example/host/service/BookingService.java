@@ -18,7 +18,7 @@ public class BookingService {
 
     private final OverlapValidationService overlapService;
 
-    public Booking createBooking(Booking booking) throws OverlappingDatesException, NullPointerException  {
+    public Booking createBooking(Booking booking) throws OverlappingDatesException, NullPointerException, IllegalArgumentException  {
 
         if (booking.getStartDate() == null ) {
             throw new NullPointerException ("Start date cannot be null.");
@@ -39,7 +39,7 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public Booking updateBooking(Long id, Booking updatedBooking) throws BookingNotFoundException, OverlappingDatesException, NullPointerException  {
+    public Booking updateBooking(Long id, Booking updatedBooking) throws BookingNotFoundException, OverlappingDatesException, NullPointerException, IllegalArgumentException  {
         Booking existingBooking = bookingRepository.findById(id)
                 .orElseThrow(() -> new BookingNotFoundException("Reservation not found."));
 
