@@ -39,6 +39,16 @@ This project allows users to manage bookings and date blocks for properties. It 
 - **Version:** 17 
 - [Official Documentation](https://docs.oracle.com/en/java/javase/17/)
 
+## 8. Flyway
+- **Description:** Flyway is an open-source database migration tool primarily for Java. It ensures that the database evolves along with the software, allowing developers to manage and track database changes using SQL scripts and Java-based migrations.
+- **Version:** 9.22.3
+- [Official Documentation](https://flywaydb.org/documentation/)
+
+## 9. JUnit
+- **Description:** JUnit is a widely-used testing framework for Java. It plays a crucial role in test-driven development (TDD) and ensures that code changes do not introduce new bugs. JUnit provides annotations to define test methods, test lifecycle callbacks, and features for assertions and assumptions.
+- **Version:** JUnit 5
+- [Official Documentation](https://junit.org/junit5/docs/current/user-guide/)
+
 ## How to Run the Project
 
 1. Clone the repository.

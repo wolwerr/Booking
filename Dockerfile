@@ -1,4 +1,3 @@
-# Usando uma imagem base oficial do Java 11
 FROM openjdk:17-oracle
 
 # Meta-informação como autor e descrição (opcional)
