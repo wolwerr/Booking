@@ -1,5 +1,6 @@
 package com.example.host.controller;
 
+import com.example.host.Exception.BlockNotFoundException;
 import com.example.host.Exception.OverlappingDatesException;
 import com.example.host.entities.Block;
 import com.example.host.service.BlockService;
@@ -26,17 +27,19 @@ public class BlockController {
     }
 
     @PostMapping
-    public ResponseEntity<Block> createBlock(@RequestBody Block block) {
+    public ResponseEntity<Object> createBlock(@RequestBody Block block) {
         try {
             Block newBlock = blockService.createBlock(block);
             return new ResponseEntity<>(newBlock, HttpStatus.CREATED);
+        } catch (OverlappingDatesException ode) {
+            return new ResponseEntity<>(ode.getMessage(), HttpStatus.CONFLICT);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Server error.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<Block>> getAllBlocks() {
+    public ResponseEntity<Object> getAllBlocks() {
         List<Block> blocks = blockService.getAllBlocks();
         if (blocks.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -47,27 +50,30 @@ public class BlockController {
     @GetMapping("/{id}")
     public ResponseEntity<Block> getBlockById(@PathVariable("id") Long id) {
         Optional<Block> blockData = blockService.getBlockById(id);
-
         return blockData.map(block -> new ResponseEntity<>(block, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Block> updateBlock(@PathVariable("id") Long id, @RequestBody Block block) {
+    public ResponseEntity<Object> updateBlock(@PathVariable("id") Long id, @RequestBody Block block) {
         try {
             Block updatedBlock = blockService.updateBlock(id, block);
             return new ResponseEntity<>(updatedBlock, HttpStatus.OK);
+        } catch (BlockNotFoundException bnfe) {
+            return new ResponseEntity<>(bnfe.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (OverlappingDatesException ode) {
+            return new ResponseEntity<>(ode.getMessage(), HttpStatus.CONFLICT);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteBlock(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deleteBlock(@PathVariable("id") Long id) {
         try {
             blockService.deleteBlock(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BlockNotFoundException bnfe) {
+            return new ResponseEntity<>(bnfe.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.host.controller;
 
+import com.example.host.Exception.BookingNotFoundException;
 import com.example.host.Exception.OverlappingDatesException;
 import com.example.host.entities.Booking;
 import com.example.host.service.BookingService;
@@ -38,7 +39,7 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Booking>> getAllBookings() {
+    public ResponseEntity<Object> getAllBookings() {
         List<Booking> bookings = bookingService.getAllBookings();
         if (bookings.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -56,22 +57,23 @@ public class BookingController {
     public ResponseEntity<Object> updateBooking(@PathVariable("id") Long id, @RequestBody Booking booking) {
         try {
             Booking updatedBooking = bookingService.updateBooking(id, booking);
-            if (updatedBooking == null) {
-                return new ResponseEntity<>("Booking not found.", HttpStatus.NOT_FOUND);
-            }
             return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
-        } catch (Exception ode) {
+        } catch (BookingNotFoundException bnfe) {
+            return new ResponseEntity<>(bnfe.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (OverlappingDatesException ode) {
             return new ResponseEntity<>(ode.getMessage(), HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteBooking(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deleteBooking(@PathVariable("id") Long id) {
         try {
             bookingService.deleteBooking(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BookingNotFoundException bnfe) {
+            return new ResponseEntity<>(bnfe.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

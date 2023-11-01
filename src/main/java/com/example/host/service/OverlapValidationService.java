@@ -18,13 +18,15 @@ public class OverlapValidationService {
 
     private final BlockRepository blockRepository;
 
-    public boolean isBookingOverlap(LocalDate startDate, LocalDate endDate) {
+    public boolean isBookingOverlap(LocalDate startDate, LocalDate endDate, Long excludeBookingId) {
         List<Booking> overlappingBookings = bookingRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(endDate, startDate);
+        overlappingBookings.removeIf(booking -> booking.getId().equals(excludeBookingId));
         return !overlappingBookings.isEmpty();
     }
 
-    public boolean isBlockOverlap(LocalDate startDate, LocalDate endDate) {
+    public boolean isBlockOverlap(LocalDate startDate, LocalDate endDate, Long excludeBlockId) {
         List<Block> overlappingBlocks = blockRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(endDate, startDate);
+        overlappingBlocks.removeIf(block -> block.getId().equals(excludeBlockId));
         return !overlappingBlocks.isEmpty();
     }
 }

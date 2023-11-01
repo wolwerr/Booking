@@ -1,5 +1,7 @@
 package com.example.host.service;
 
+import com.example.host.Exception.BlockNotFoundException;
+import com.example.host.Exception.OverlappingDatesException;
 import com.example.host.entities.Block;
 import com.example.host.repositories.BlockRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,31 +18,32 @@ public class BlockService {
 
     private final OverlapValidationService overlapService;
 
-    public Block createBlock(Block block) throws Exception {
-        if (overlapService.isBlockOverlap(block.getStartDate(), block.getEndDate())
-                || overlapService.isBookingOverlap(block.getStartDate(), block.getEndDate())) {
-            throw new Exception("The block overlaps with an existing block or reservation.");
+    public Block createBlock(Block block) throws OverlappingDatesException {
+        if (overlapService.isBlockOverlap(block.getStartDate(), block.getEndDate(), null)
+                || overlapService.isBookingOverlap(block.getStartDate(), block.getEndDate(), null)) {
+            throw new OverlappingDatesException("The block overlaps with an existing block or reservation.");
         }
         return blockRepository.save(block);
     }
 
-    public Block updateBlock(Long id, Block updatedBlock) throws Exception {
-        if (!blockRepository.existsById(id)) {
-            throw new Exception("The block with the specified ID does not exist.");
+    public Block updateBlock(Long id, Block updatedBlock) throws BlockNotFoundException, OverlappingDatesException {
+        Block existingBlock = blockRepository.findById(id)
+                .orElseThrow(() -> new BlockNotFoundException("Block not found."));
+        if (overlapService.isBlockOverlap(updatedBlock.getStartDate(), updatedBlock.getEndDate(), id)
+                || overlapService.isBookingOverlap(updatedBlock.getStartDate(), updatedBlock.getEndDate(), null)) {
+            throw new OverlappingDatesException("The updated block overlaps with an existing block or booking.");
         }
 
-        if (overlapService.isBlockOverlap(updatedBlock.getStartDate(), updatedBlock.getEndDate())
-                || overlapService.isBookingOverlap(updatedBlock.getStartDate(), updatedBlock.getEndDate())) {
-            throw new Exception("The updated block overwrites an existing block or reservation.");
-        }
+        existingBlock.setStartDate(updatedBlock.getStartDate());
+        existingBlock.setEndDate(updatedBlock.getEndDate());
+        existingBlock.setReason(updatedBlock.getReason());
 
-        updatedBlock.setId(id);
-        return blockRepository.save(updatedBlock);
+        return blockRepository.save(existingBlock);
     }
 
-    public void deleteBlock(Long id) throws Exception {
+    public void deleteBlock(Long id) throws BlockNotFoundException {
         if (!blockRepository.existsById(id)) {
-            throw new Exception("The block with the specified ID does not exist.");
+            throw new BlockNotFoundException("The block with the specified ID does not exist.");
         }
         blockRepository.deleteById(id);
     }
