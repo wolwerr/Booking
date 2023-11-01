@@ -18,17 +18,46 @@ public class BlockService {
 
     private final OverlapValidationService overlapService;
 
-    public Block createBlock(Block block) throws OverlappingDatesException {
+    public Block createBlock(Block block) throws OverlappingDatesException, NullPointerException  {
+
+        if (block.getStartDate() == null ) {
+            throw new NullPointerException ("Start date cannot be null.");
+        }
+        if (block.getEndDate() == null) {
+            throw new NullPointerException ("End date cannot be null.");
+        }
+        if (block.getReason() == null || block.getReason().isEmpty()) {
+            throw new NullPointerException ("Reason cannot be null or empty.");
+        }
+
+        if (block.getEndDate().isBefore(block.getStartDate())) {
+            throw new IllegalArgumentException("End date cannot be before the start date.");
+        }
+
         if (overlapService.isBlockOverlap(block.getStartDate(), block.getEndDate(), null)
                 || overlapService.isBookingOverlap(block.getStartDate(), block.getEndDate(), null)) {
-            throw new OverlappingDatesException("The block overlaps with an existing block or reservation.");
+            throw new OverlappingDatesException("The block overlaps with an existing block or booking.");
         }
+
         return blockRepository.save(block);
     }
 
-    public Block updateBlock(Long id, Block updatedBlock) throws BlockNotFoundException, OverlappingDatesException {
+    public Block updateBlock(Long id, Block updatedBlock) throws BlockNotFoundException, OverlappingDatesException, NullPointerException  {
         Block existingBlock = blockRepository.findById(id)
                 .orElseThrow(() -> new BlockNotFoundException("Block not found."));
+
+        if (updatedBlock.getStartDate() == null ) {
+            throw new NullPointerException ("Start date cannot be null.");
+        }
+        if (updatedBlock.getEndDate() == null) {
+            throw new NullPointerException ("End date cannot be null.");
+        }
+        if (updatedBlock.getReason() == null || updatedBlock.getReason().isEmpty()) {
+            throw new NullPointerException ("Reason data cannot be null or empty.");
+        }
+        if (updatedBlock.getEndDate().isBefore(updatedBlock.getStartDate())) {
+            throw new IllegalArgumentException("End date cannot be before the start date.");
+        }
         if (overlapService.isBlockOverlap(updatedBlock.getStartDate(), updatedBlock.getEndDate(), id)
                 || overlapService.isBookingOverlap(updatedBlock.getStartDate(), updatedBlock.getEndDate(), null)) {
             throw new OverlappingDatesException("The updated block overlaps with an existing block or booking.");
