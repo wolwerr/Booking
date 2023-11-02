@@ -55,3 +55,4 @@ This project allows users to manage bookings and date blocks for properties. It 
 2. Navigate to the project folder and run `mvn spring-boot:run` (assuming you have Maven installed).
 3. Access the API through the URL `http://localhost:8080/`.
 4. To view the Swagger documentation, visit `http://localhost:8080/swagger-ui.html`.
+5. To view the application running, visit 'https://booking-s9ki.onrender.com/'.
