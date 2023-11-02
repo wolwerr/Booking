@@ -78,11 +78,4 @@
 		</plugins>
 	</build>
 
-	<distributionManagement>
-		<repository>
-			<id>deploymentRepo</id>
-			<url>http://booking-production-e6d8.up.railway.app</url>
-		</repository>
-	</distributionManagement>
-
 </project>
