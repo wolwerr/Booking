@@ -12,9 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,23 +35,13 @@ public class BookingControllerIntegrationTest {
 
     @Test
     public void shouldCreateBooking() throws Exception {
-        String jsonRequest = "{\"startDate\":\"2022-01-01\",\"endDate\":\"2022-01-10\",\"guestData\":\"John Doe\"}";
+        String jsonRequest = "{\"startDate\":\"2020-01-01\",\"endDate\":\"2020-01-10\",\"guestData\":\"John Doe\"}";
 
         this.mockMvc.perform(post("/api/bookings")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isCreated());
     }
-
-//    @Test
-//    public void shouldUpdateBooking() throws Exception {
-//        String jsonRequest = "{\"startDate\":\"2022-01-05\",\"endDate\":\"2022-01-15\",\"guestData\":\"Jane Doe\"}";
-//
-//        this.mockMvc.perform(put("/api/bookings/1")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonRequest))
-//                .andExpect(status().isOk());
-//    }
 
     @Test
     public void shouldDeleteBooking() throws Exception {
@@ -70,20 +58,6 @@ public class BookingControllerIntegrationTest {
                         .content(jsonRequest))
                 .andExpect(status().isBadRequest());
     }
-
-//    @Test
-//    @Transactional
-//    public void shouldSaveBookingToDatabase() throws Exception {
-//        String jsonRequest = "{\"startDate\":\"2022-01-01\",\"endDate\":\"2022-01-10\",\"guestData\":\"John Doe\"}";
-//
-//        this.mockMvc.perform(post("/api/bookings")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonRequest))
-//                .andExpect(status().isCreated());
-//
-//        List<Booking> bookings = bookingRepository.findAll();
-//        assertThat(bookings.get(0).getGuestData()).isEqualTo("Guest B");
-//    }
 
     @Test
     @Transactional

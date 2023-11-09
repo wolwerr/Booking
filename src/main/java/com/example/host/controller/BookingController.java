@@ -4,6 +4,7 @@ import com.example.host.Exception.BookingNotFoundException;
 import com.example.host.Exception.OverlappingDatesException;
 import com.example.host.entities.Booking;
 import com.example.host.service.BookingService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
-
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
-    }
 
     @ExceptionHandler(OverlappingDatesException.class)
     public ResponseEntity<String> handleOverlappingDatesException(OverlappingDatesException e) {

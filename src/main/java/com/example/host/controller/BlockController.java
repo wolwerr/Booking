@@ -4,6 +4,7 @@ import com.example.host.Exception.BlockNotFoundException;
 import com.example.host.Exception.OverlappingDatesException;
 import com.example.host.entities.Block;
 import com.example.host.service.BlockService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/blocks")
 public class BlockController {
 
     private final BlockService blockService;
 
-    public BlockController(BlockService blockService) {
-        this.blockService = blockService;
-    }
 
     @ExceptionHandler(OverlappingDatesException.class)
     public ResponseEntity<String> handleOverlappingDatesException(OverlappingDatesException e) {

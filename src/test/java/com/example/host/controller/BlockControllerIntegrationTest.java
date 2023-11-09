@@ -12,10 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,23 +35,13 @@ public class BlockControllerIntegrationTest {
 
     @Test
     public void shouldCreateBlock() throws Exception {
-        String jsonRequest = "{\"startDate\":\"2022-01-01\",\"endDate\":\"2022-01-10\",\"reason\":\"Maintenance\"}";
+        String jsonRequest = "{\"startDate\":\"2021-01-01\",\"endDate\":\"2021-01-10\",\"reason\":\"Maintenance\"}";
 
         this.mockMvc.perform(post("/api/blocks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isCreated());
     }
-
-//    @Test
-//    public void shouldUpdateBlock() throws Exception {
-//        String jsonRequest = "{\"startDate\":\"2022-01-05\",\"endDate\":\"2022-01-15\",\"reason\":\"Event\"}";
-//
-//        this.mockMvc.perform(put("/api/blocks/1")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonRequest))
-//                .andExpect(status().isOk());
-//    }
 
     @Test
     public void shouldDeleteBlock() throws Exception {
@@ -72,19 +59,6 @@ public class BlockControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    @Transactional
-//    public void shouldSaveBlockToDatabase() throws Exception {
-//        String jsonRequest = "{\"startDate\":\"2022-01-01\",\"endDate\":\"2022-01-10\",\"reason\":\"Reforming\"}";
-//
-//        this.mockMvc.perform(post("/api/blocks")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonRequest))
-//                .andExpect(status().isCreated());
-//
-//        List<Block> blocks = blockRepository.findAll();
-//        assertThat(blocks.get(0).getReason()).isEqualTo("Maintenance");
-//    }
 
     @Test
     @Transactional
