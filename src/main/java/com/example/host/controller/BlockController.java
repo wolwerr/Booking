@@ -19,7 +19,6 @@ public class BlockController {
 
     private final BlockService blockService;
 
-
     @ExceptionHandler(OverlappingDatesException.class)
     public ResponseEntity<String> handleOverlappingDatesException(OverlappingDatesException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT); // 409 Conflict

@@ -16,7 +16,7 @@ class BookingTest {
         LocalDate endDate = LocalDate.now().plusDays(1);
         String guestData = "Guest 1";
 
-        Booking booking = new Booking(1L, startDate, endDate, guestData);
+        Booking booking = new Booking(1L, startDate, endDate, guestData, BookingStatus.ACTIVE);
 
         assertEquals(1L, booking.getId());
         assertEquals(startDate, booking.getStartDate());
@@ -31,8 +31,8 @@ class BookingTest {
         LocalDate endDate = LocalDate.now().plusDays(1);
         String guestData = "Guest 1";
 
-        Booking booking = new Booking(1L, startDate, endDate, guestData);
-        Booking updatedBooking = new Booking(id, startDate.plusDays(2), endDate.plusDays(3), "Updated Guest");
+        Booking booking = new Booking(1L, startDate, endDate, guestData, BookingStatus.ACTIVE);
+        Booking updatedBooking = new Booking(id, startDate.plusDays(2), endDate.plusDays(3), "Updated Guest", BookingStatus.ACTIVE);
 
         booking.setStartDate(updatedBooking.getStartDate());
         booking.setEndDate(updatedBooking.getEndDate());
@@ -50,7 +50,7 @@ class BookingTest {
         LocalDate endDate = LocalDate.now().plusDays(1);
         String guestData = "Guest 1";
 
-        Booking booking = new Booking(1L, startDate, endDate, guestData);
+        Booking booking = new Booking(1L, startDate, endDate, guestData, BookingStatus.ACTIVE);
 
         assertEquals(startDate, booking.getStartDate());
     }
@@ -61,7 +61,7 @@ class BookingTest {
         LocalDate endDate = LocalDate.now().plusDays(1);
         String guestData = "Guest 1";
 
-        Booking booking = new Booking(1L, startDate, endDate, guestData);
+        Booking booking = new Booking(1L, startDate, endDate, guestData, BookingStatus.ACTIVE);
 
         assertEquals(endDate, booking.getEndDate());
     }
@@ -72,7 +72,7 @@ class BookingTest {
         LocalDate endDate = LocalDate.now().plusDays(1);
         String guestData = "Guest 1";
 
-        Booking booking = new Booking(1L, startDate, endDate, guestData);
+        Booking booking = new Booking(1L, startDate, endDate, guestData, BookingStatus.ACTIVE);
 
         assertEquals(guestData, booking.getGuestData());
     }
@@ -83,7 +83,7 @@ class BookingTest {
         LocalDate endDate = LocalDate.MIN;
         String guestData = "Guest 1";
 
-        Booking booking = new Booking(1L, startDate, endDate, guestData);
+        Booking booking = new Booking(1L, startDate, endDate, guestData, BookingStatus.ACTIVE);
 
         assertEquals(startDate, booking.getStartDate());
         assertEquals(endDate, booking.getEndDate());
@@ -95,7 +95,7 @@ class BookingTest {
         LocalDate endDate = LocalDate.MAX;
         String guestData = "Guest 1";
 
-        Booking booking = new Booking(1L, startDate, endDate, guestData);
+        Booking booking = new Booking(1L, startDate, endDate, guestData, BookingStatus.ACTIVE);
 
         assertEquals(startDate, booking.getStartDate());
         assertEquals(endDate, booking.getEndDate());

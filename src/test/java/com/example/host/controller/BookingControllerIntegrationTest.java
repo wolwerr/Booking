@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
+import static com.example.host.entities.BookingStatus.CANCELLED;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,7 +38,7 @@ class BookingControllerIntegrationTest {
 
     @Test
     void shouldCreateBooking() throws Exception {
-        String jsonRequest = "{\"startDate\":\"2020-01-01\",\"endDate\":\"2020-01-10\",\"guestData\":\"John Doe\"}";
+        String jsonRequest = "{\"startDate\":\"2020-01-01\",\"endDate\":\"2020-01-10\",\"guestData\":\"John Doe\",\"status\":\"ACTIVE\"}";
 
         this.mockMvc.perform(post("/api/v1/bookings")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +54,7 @@ class BookingControllerIntegrationTest {
 
     @Test
     void shouldNotAllowStartDateAfterEndDate() throws Exception {
-        String jsonRequest = "{\"startDate\":\"2022-01-10\",\"endDate\":\"2022-01-05\",\"guestData\":\"John Doe\"}";
+        String jsonRequest = "{\"startDate\":\"2022-01-10\",\"endDate\":\"2022-01-05\",\"guestData\":\"John Doe\",\"status\":\"ACTIVE\"}";
 
         this.mockMvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -68,9 +69,10 @@ class BookingControllerIntegrationTest {
         existingBooking.setStartDate(LocalDate.of(2022, 1, 1));
         existingBooking.setEndDate(LocalDate.of(2022, 1, 10));
         existingBooking.setGuestData("Existing Guest");
+        existingBooking.setStatus(CANCELLED);
         bookingRepository.save(existingBooking);
 
-        String jsonRequest = "{\"startDate\":\"2022-01-05\",\"endDate\":\"2022-01-15\",\"guestData\":\"John Doe\"}";
+        String jsonRequest = "{\"startDate\":\"2022-01-05\",\"endDate\":\"2022-01-15\",\"guestData\":\"John Doe\",\"status\":\"ACTIVE\"}";
 
         this.mockMvc.perform(post("/api/v1/bookings")
                         .contentType(MediaType.APPLICATION_JSON)

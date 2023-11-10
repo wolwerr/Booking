@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.host.entities.BookingStatus.ACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -40,6 +41,7 @@ class BookingLifecycleEndToEndTest {
         booking.put("startDate", LocalDate.now().plusDays(100).toString());
         booking.put("endDate", LocalDate.now().plusDays(105).toString());
         booking.put("guestData", "E2E Test Guest");
+        booking.put("status", "ACTIVE");
 
         // Send the POST request and receive a response entity
         ResponseEntity<Booking> result = restTemplate.postForEntity(uri, booking, Booking.class);
@@ -49,6 +51,7 @@ class BookingLifecycleEndToEndTest {
         Booking createdBooking = result.getBody();
         assertThat(createdBooking).isNotNull();
         assertThat(createdBooking.getGuestData()).isEqualTo("E2E Test Guest");
+        assertThat(createdBooking.getStatus()).isEqualTo(ACTIVE);
 
         // Retrieve the created Booking using a GET request
         Booking retrievedBooking = restTemplate.getForObject(baseUrl + "/" + createdBooking.getId(), Booking.class);
@@ -67,9 +70,10 @@ class BookingLifecycleEndToEndTest {
 
         // Create a Booking
         Map<String, Object> booking = new HashMap<>();
-        booking.put("startDate", LocalDate.now().plusDays(30).toString());
-        booking.put("endDate", LocalDate.now().plusDays(40).toString());
+        booking.put("startDate", LocalDate.now().plusDays(60).toString());
+        booking.put("endDate", LocalDate.now().plusDays(70).toString());
         booking.put("guestData", "Teste E2E");
+        booking.put("status", "ACTIVE");
 
         ResponseEntity<Booking> createResponse = restTemplate.postForEntity(uri, booking, Booking.class);
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);

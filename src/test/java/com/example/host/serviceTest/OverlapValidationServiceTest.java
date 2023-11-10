@@ -64,7 +64,7 @@ class OverlapValidationServiceTest {
 
 
         List<Booking> overlappingBookings = new ArrayList<>();
-        overlappingBookings.add(new Booking(1L, LocalDate.of(2022, 1, 2), LocalDate.of(2022, 1, 4), "Guest Data"));
+        overlappingBookings.add(new Booking(1L, LocalDate.of(2022, 1, 2), LocalDate.of(2022, 1, 4), "Guest Data", null));
 
         when(bookingRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(endDate, startDate)).thenReturn(overlappingBookings);
 

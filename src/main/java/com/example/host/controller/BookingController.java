@@ -1,5 +1,6 @@
 package com.example.host.controller;
 
+import com.example.host.dto.RebookingRequest;
 import com.example.host.exceptions.BookingNotFoundException;
 import com.example.host.exceptions.OverlappingDatesException;
 import com.example.host.entities.Booking;
@@ -19,6 +20,8 @@ import java.util.Optional;
 public class BookingController {
 
     private final BookingService bookingService;
+
+    String error = "An error occurred.";
 
     @ExceptionHandler(OverlappingDatesException.class)
     public ResponseEntity<String> handleOverlappingDatesException(OverlappingDatesException e) {
@@ -66,7 +69,7 @@ public class BookingController {
         } catch (IllegalArgumentException | NullPointerException iae) {
             return new ResponseEntity<>(iae.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>("An error occurred.", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -76,6 +79,34 @@ public class BookingController {
             return bookingService.deleteBooking(id);
         } catch (BookingNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<String> cancelBooking(@PathVariable Long id) {
+        try {
+            return bookingService.cancelBooking(id);
+        } catch (BookingNotFoundException bnfe) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(bnfe.getMessage());
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(iae.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    @PatchMapping("/{id}/rebook")
+    public ResponseEntity<String> rebookBooking(@PathVariable Long id, @RequestBody RebookingRequest rebookingRequest) {
+        try {
+            return bookingService.rebookBooking(id, rebookingRequest.getNewStartDate(), rebookingRequest.getNewEndDate());
+        } catch (BookingNotFoundException bnfe) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(bnfe.getMessage());
+        } catch (OverlappingDatesException ode) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ode.getMessage());
+        } catch (IllegalArgumentException iae) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(iae.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.host.services;
 
+import com.example.host.entities.BookingStatus;
 import com.example.host.exceptions.BookingNotFoundException;
 import com.example.host.exceptions.OverlappingDatesException;
 import com.example.host.entities.Booking;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +76,44 @@ public class BookingService {
 
     public Optional<Booking> getBookingById(Long id) {
         return bookingRepository.findById(id);
+    }
+
+    public ResponseEntity<String> cancelBooking(Long id) throws BookingNotFoundException{
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new BookingNotFoundException("Booking not found with id: " + id));
+
+        if (booking.getStatus() == BookingStatus.CANCELLED) {
+            throw new BookingNotFoundException("Booking is already cancelled.");
+        }
+
+        booking.setStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+        return ResponseEntity.ok("Booking successfully cancelled.");
+    }
+
+
+    public ResponseEntity<String> rebookBooking(Long id, LocalDate newStartDate, LocalDate newEndDate) throws BookingNotFoundException {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new BookingNotFoundException("Booking not found with id: " + id));
+
+        if (booking.getStatus() != BookingStatus.CANCELLED) {
+            throw new BookingNotFoundException("Only cancelled bookings can be rebooked.");
+        }
+
+        if (newEndDate.isBefore(newStartDate)) {
+            throw new BookingNotFoundException("The end date cannot be before the start date.");
+        }
+
+        if (overlapService.isBookingOverlap(newStartDate, newEndDate, id)
+                || overlapService.isBlockOverlap(newStartDate, newEndDate, null)) {
+            throw new OverlappingDatesException("The selected date range overlaps with existing bookings or blocks.");
+        }
+
+        booking.setStartDate(newStartDate);
+        booking.setEndDate(newEndDate);
+        booking.setStatus(BookingStatus.ACTIVE);
+        bookingRepository.save(booking);
+        return ResponseEntity.ok("Booking successfully rebooked.");
     }
 
 }
