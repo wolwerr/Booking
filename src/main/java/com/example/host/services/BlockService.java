@@ -1,10 +1,11 @@
-package com.example.host.service;
+package com.example.host.services;
 
-import com.example.host.Exception.BlockNotFoundException;
-import com.example.host.Exception.OverlappingDatesException;
+import com.example.host.exceptions.BlockNotFoundException;
+import com.example.host.exceptions.OverlappingDatesException;
 import com.example.host.entities.Block;
 import com.example.host.repositories.BlockRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,11 +71,12 @@ public class BlockService {
         return blockRepository.save(existingBlock);
     }
 
-    public void deleteBlock(Long id) throws BlockNotFoundException {
+    public ResponseEntity<String> deleteBlock(Long id) throws BlockNotFoundException {
         if (!blockRepository.existsById(id)) {
             throw new BlockNotFoundException("The block with the specified ID does not exist.");
         }
         blockRepository.deleteById(id);
+        return ResponseEntity.ok("The block has been successfully cancelled.");
     }
 
     public List<Block> getAllBlocks() {

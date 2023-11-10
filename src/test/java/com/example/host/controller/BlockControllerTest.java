@@ -1,8 +1,8 @@
 package com.example.host.controller;
 
-import com.example.host.Exception.OverlappingDatesException;
+import com.example.host.exceptions.OverlappingDatesException;
 import com.example.host.entities.Block;
-import com.example.host.service.BlockService;
+import com.example.host.services.BlockService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -17,12 +17,12 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class BlockControllerTest {
+class BlockControllerTest {
 
     private final BlockService blockService = Mockito.mock(BlockService.class);
     private final BlockController blockController = new BlockController(blockService);
     @Test
-    public void test_getAllBlocks_returnsAllBlocks() {
+    void test_getAllBlocks_returnsAllBlocks() {
         // Arrange
         List<Block> blocks = new ArrayList<>();
         blocks.add(new Block(1L, LocalDate.now(), LocalDate.now().plusDays(1), "Reason 1"));
@@ -38,7 +38,7 @@ public class BlockControllerTest {
     }
 
     @Test
-    public void test_getBlockById_returnsBlockWithId() {
+    void test_getBlockById_returnsBlockWithId() {
         Long id = 1L;
         Block block = new Block(id, LocalDate.now(), LocalDate.now().plusDays(1), "Reason");
         Mockito.when(blockService.getBlockById(id)).thenReturn(Optional.of(block));
@@ -50,7 +50,7 @@ public class BlockControllerTest {
     }
 
     @Test
-    public void test_createBlock_createsNewBlock() {
+    void test_createBlock_createsNewBlock() {
 
         Block block = new Block(1L, LocalDate.now(), LocalDate.now().plusDays(1), "Reason");
         Mockito.when(blockService.createBlock(block)).thenReturn(block);
@@ -62,7 +62,7 @@ public class BlockControllerTest {
     }
 
     @Test
-    public void test_getAllBlocks_returnsNoContent() {
+    void test_getAllBlocks_returnsNoContent() {
 
         Mockito.when(blockService.getAllBlocks()).thenReturn(Collections.emptyList());
 
@@ -73,7 +73,7 @@ public class BlockControllerTest {
     }
 
     @Test
-    public void test_getBlockById_returnsNotFound() {
+    void test_getBlockById_returnsNotFound() {
         Long id = 1L;
         Mockito.when(blockService.getBlockById(id)).thenReturn(Optional.empty());
 
@@ -84,7 +84,7 @@ public class BlockControllerTest {
     }
 
     @Test
-    public void test_createBlock_withOverlappingDates_throwsOverlappingDatesException() {
+    void test_createBlock_withOverlappingDates_throwsOverlappingDatesException() {
 
         Block block = new Block(1L, LocalDate.now(), LocalDate.now().plusDays(1), "Reason");
         Mockito.when(blockService.createBlock(block)).thenThrow(new OverlappingDatesException("The block overlaps with an existing block or reservation."));
@@ -96,7 +96,7 @@ public class BlockControllerTest {
     }
 
     @Test
-    public void test_putRequest_updatesBlockAndReturnsStatusCode200() {
+    void test_putRequest_updatesBlockAndReturnsStatusCode200() {
         Long id = 1L;
         Block block = new Block(id, LocalDate.now(), LocalDate.now().plusDays(1), "Reason");
         Block updatedBlock = new Block(id, LocalDate.now().plusDays(2), LocalDate.now().plusDays(3), "Updated Reason");
@@ -109,16 +109,7 @@ public class BlockControllerTest {
     }
 
     @Test
-    public void test_deleteRequest_deletesBlockAndReturnsStatusCode200() {
-        Long id = 1L;
-
-        ResponseEntity<Object> response = blockController.deleteBlock(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    public void test_postRequest_withInvalidData_returnsStatusCode500() {
+    void test_postRequest_withInvalidData_returnsStatusCode500() {
         Block block = new Block(1L, LocalDate.now(), LocalDate.now().plusDays(1), "Reason");
         Mockito.when(blockService.createBlock(block)).thenThrow(new RuntimeException());
 

@@ -1,4 +1,4 @@
-package com.example.host.Exception;
+package com.example.host.exceptions;
 
 public class BlockNotFoundException extends RuntimeException {
     public BlockNotFoundException(String message) {

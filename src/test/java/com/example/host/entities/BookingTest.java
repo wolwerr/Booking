@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BookingTest {
+class BookingTest {
 
 
     @Test
-    public void test_createBookingWithValidData() {
+    void test_createBookingWithValidData() {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
         String guestData = "Guest 1";
@@ -25,7 +25,7 @@ public class BookingTest {
     }
 
     @Test
-    public void test_updateBookingWithValidData() {
+    void test_updateBookingWithValidData() {
         Long id = 1L;
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
@@ -45,7 +45,7 @@ public class BookingTest {
     }
 
     @Test
-    public void test_getStartDate() {
+    void test_getStartDate() {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
         String guestData = "Guest 1";
@@ -56,7 +56,7 @@ public class BookingTest {
     }
 
     @Test
-    public void test_getEndDate() {
+    void test_getEndDate() {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
         String guestData = "Guest 1";
@@ -67,7 +67,7 @@ public class BookingTest {
     }
 
     @Test
-    public void test_getGuestData() {
+    void test_getGuestData() {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
         String guestData = "Guest 1";
@@ -78,7 +78,7 @@ public class BookingTest {
     }
 
     @Test
-    public void test_createBookingWithMinimumDates() {
+    void test_createBookingWithMinimumDates() {
         LocalDate startDate = LocalDate.MIN;
         LocalDate endDate = LocalDate.MIN;
         String guestData = "Guest 1";
@@ -90,7 +90,7 @@ public class BookingTest {
     }
 
     @Test
-    public void test_createBookingWithMaximumDates() {
+    void test_createBookingWithMaximumDates() {
         LocalDate startDate = LocalDate.MAX;
         LocalDate endDate = LocalDate.MAX;
         String guestData = "Guest 1";

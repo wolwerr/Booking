@@ -2,8 +2,8 @@ package com.example.host.serviceTest;
 
 import com.example.host.entities.Booking;
 import com.example.host.repositories.BookingRepository;
-import com.example.host.service.BookingService;
-import com.example.host.service.OverlapValidationService;
+import com.example.host.services.BookingService;
+import com.example.host.services.OverlapValidationService;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class BookingServiceTest {
+class BookingServiceTest {
 
     @Test
-    public void test_createBookingWithValidData() {
+    void test_createBookingWithValidData() {
         BookingRepository bookingRepository = mock(BookingRepository.class);
         OverlapValidationService overlapService = mock(OverlapValidationService.class);
         BookingService bookingService = new BookingService(bookingRepository, overlapService);
@@ -39,7 +39,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void test_updateBookingWithValidData() {
+    void test_updateBookingWithValidData() {
         Long bookingId = 1L;
         Booking existingBooking = new Booking();
         existingBooking.setId(bookingId);
@@ -68,7 +68,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void test_deleteBookingById() {
+    void test_deleteBookingById() {
         Long bookingId = 1L;
         BookingRepository bookingRepository = mock(BookingRepository.class);
         OverlapValidationService overlapService = mock(OverlapValidationService.class);
@@ -82,7 +82,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void test_getAllBookings() {
+    void test_getAllBookings() {
         List<Booking> bookings = new ArrayList<>();
         bookings.add(new Booking());
         bookings.add(new Booking());
@@ -99,7 +99,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void test_createBookingWithNullStartDate() {
+    void test_createBookingWithNullStartDate() {
         Booking booking = new Booking();
         booking.setEndDate(LocalDate.of(2022, 1, 5));
         booking.setGuestData("John Doe");
@@ -113,7 +113,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void test_createBookingWithNullEndDate() {
+    void test_createBookingWithNullEndDate() {
         Booking booking = new Booking();
         booking.setStartDate(LocalDate.of(2022, 1, 1));
         booking.setGuestData("John Doe");
@@ -127,7 +127,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void test_createBookingWithNullOrEmptyGuestData() {
+    void test_createBookingWithNullOrEmptyGuestData() {
         Booking booking = new Booking();
         booking.setStartDate(LocalDate.of(2022, 1, 1));
         booking.setEndDate(LocalDate.of(2022, 1, 5));
@@ -145,7 +145,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void test_createBookingWithEndDateBeforeStartDate() {
+    void test_createBookingWithEndDateBeforeStartDate() {
         Booking booking = new Booking();
         booking.setStartDate(LocalDate.of(2022, 1, 5));
         booking.setEndDate(LocalDate.of(2022, 1, 1));

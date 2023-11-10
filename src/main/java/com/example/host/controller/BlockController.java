@@ -1,9 +1,9 @@
 package com.example.host.controller;
 
-import com.example.host.Exception.BlockNotFoundException;
-import com.example.host.Exception.OverlappingDatesException;
+import com.example.host.exceptions.BlockNotFoundException;
+import com.example.host.exceptions.OverlappingDatesException;
 import com.example.host.entities.Block;
-import com.example.host.service.BlockService;
+import com.example.host.services.BlockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/blocks")
+@RequestMapping("/api/v1/blocks")
 public class BlockController {
 
     private final BlockService blockService;
@@ -71,12 +71,13 @@ public class BlockController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteBlock(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteBlock(@PathVariable("id") Long id) {
         try {
-            blockService.deleteBlock(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return blockService.deleteBlock(id);
         } catch (BlockNotFoundException bnfe) {
             return new ResponseEntity<>(bnfe.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

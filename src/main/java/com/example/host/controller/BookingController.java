@@ -1,9 +1,9 @@
 package com.example.host.controller;
 
-import com.example.host.Exception.BookingNotFoundException;
-import com.example.host.Exception.OverlappingDatesException;
+import com.example.host.exceptions.BookingNotFoundException;
+import com.example.host.exceptions.OverlappingDatesException;
 import com.example.host.entities.Booking;
-import com.example.host.service.BookingService;
+import com.example.host.services.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/bookings")
+@RequestMapping("/api/v1/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -71,14 +71,12 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteBooking(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteBooking(@PathVariable Long id) {
         try {
-            bookingService.deleteBooking(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (BookingNotFoundException bnfe) {
-            return new ResponseEntity<>(bnfe.getMessage(), HttpStatus.NOT_FOUND);
+            return bookingService.deleteBooking(id);
+        } catch (BookingNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
-
 
 }

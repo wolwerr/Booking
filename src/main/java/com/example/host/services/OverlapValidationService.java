@@ -1,4 +1,4 @@
-package com.example.host.service;
+package com.example.host.services;
 
 import com.example.host.entities.Block;
 import com.example.host.entities.Booking;

@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class BookingControllerIntegrationTest {
+class BookingControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -27,33 +27,35 @@ public class BookingControllerIntegrationTest {
     @Autowired
     private BookingRepository bookingRepository;
 
+    String url = "/api/v1/blocks";
+
     @Test
-    public void shouldReturnAllBookings() throws Exception {
-        this.mockMvc.perform(get("/api/bookings"))
+    void shouldReturnAllBookings() throws Exception {
+        this.mockMvc.perform(get(url))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void shouldCreateBooking() throws Exception {
+    void shouldCreateBooking() throws Exception {
         String jsonRequest = "{\"startDate\":\"2020-01-01\",\"endDate\":\"2020-01-10\",\"guestData\":\"John Doe\"}";
 
-        this.mockMvc.perform(post("/api/bookings")
+        this.mockMvc.perform(post("/api/v1/bookings")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    public void shouldDeleteBooking() throws Exception {
-        this.mockMvc.perform(delete("/api/bookings/1"))
+    void shouldDeleteBooking() throws Exception {
+        this.mockMvc.perform(delete("/api/v1/bookings/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void shouldNotAllowStartDateAfterEndDate() throws Exception {
+    void shouldNotAllowStartDateAfterEndDate() throws Exception {
         String jsonRequest = "{\"startDate\":\"2022-01-10\",\"endDate\":\"2022-01-05\",\"guestData\":\"John Doe\"}";
 
-        this.mockMvc.perform(post("/api/bookings")
+        this.mockMvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isBadRequest());
@@ -61,7 +63,7 @@ public class BookingControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void shouldNotAllowOverlappingDates() throws Exception {
+    void shouldNotAllowOverlappingDatesForBooking() throws Exception {
         Booking existingBooking = new Booking();
         existingBooking.setStartDate(LocalDate.of(2022, 1, 1));
         existingBooking.setEndDate(LocalDate.of(2022, 1, 10));
@@ -70,7 +72,7 @@ public class BookingControllerIntegrationTest {
 
         String jsonRequest = "{\"startDate\":\"2022-01-05\",\"endDate\":\"2022-01-15\",\"guestData\":\"John Doe\"}";
 
-        this.mockMvc.perform(post("/api/bookings")
+        this.mockMvc.perform(post("/api/v1/bookings")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isConflict());

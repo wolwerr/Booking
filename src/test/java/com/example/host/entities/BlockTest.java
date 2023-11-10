@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BlockTest {
+class BlockTest {
 
     @Test
-    public void test_block_creation_with_valid_input() {
+    void test_block_creation_with_valid_input() {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
         String reason = "Valid Reason";
@@ -22,7 +22,7 @@ public class BlockTest {
     }
 
     @Test
-    public void test_block_update_with_valid_input() {
+    void test_block_update_with_valid_input() {
         Long id = 1L;
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
@@ -42,7 +42,7 @@ public class BlockTest {
     }
 
     @Test
-    public void test_block_deletion() {
+    void test_block_deletion() {
         Long id = 1L;
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
@@ -56,7 +56,7 @@ public class BlockTest {
     }
 
     @Test
-    public void test_block_equality() {
+    void test_block_equality() {
         Long id = 1L;
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);

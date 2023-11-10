@@ -2,8 +2,8 @@ package com.example.host.serviceTest;
 
 import com.example.host.entities.Block;
 import com.example.host.repositories.BlockRepository;
-import com.example.host.service.BlockService;
-import com.example.host.service.OverlapValidationService;
+import com.example.host.services.BlockService;
+import com.example.host.services.OverlapValidationService;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class BlockServiceTest {
+class BlockServiceTest {
 
     @Test
-    public void test_createBlockWithValidData() {
+    void test_createBlockWithValidData() {
         BlockRepository blockRepository = mock(BlockRepository.class);
         OverlapValidationService overlapService = mock(OverlapValidationService.class);
         BlockService blockService = new BlockService(blockRepository, overlapService);
@@ -40,7 +40,7 @@ public class BlockServiceTest {
 
 
     @Test
-    public void test_updateBlockWithValidData() {
+    void test_updateBlockWithValidData() {
         Long blockId = 1L;
 
         Block existingBlock = new Block();
@@ -70,7 +70,7 @@ public class BlockServiceTest {
     }
 
     @Test
-    public void test_deleteBlockById() {
+    void test_deleteBlockById() {
         Long blockId = 1L;
 
         BlockRepository blockRepository = mock(BlockRepository.class);
@@ -85,7 +85,7 @@ public class BlockServiceTest {
     }
 
     @Test
-    public void test_getAllBlocks() {
+    void test_getAllBlocks() {
         List<Block> blocks = new ArrayList<>();
         blocks.add(new Block(1L, LocalDate.of(2022, 1, 1), LocalDate.of(2022, 1, 5), "Vacation"));
         blocks.add(new Block(2L, LocalDate.of(2022, 2, 1), LocalDate.of(2022, 2, 5), "Sick leave"));
@@ -102,7 +102,7 @@ public class BlockServiceTest {
     }
 
     @Test
-    public void test_createBlockWithNullStartDate() {
+    void test_createBlockWithNullStartDate() {
         BlockRepository blockRepository = mock(BlockRepository.class);
         OverlapValidationService overlapService = mock(OverlapValidationService.class);
         BlockService blockService = new BlockService(blockRepository, overlapService);
@@ -116,7 +116,7 @@ public class BlockServiceTest {
     }
 
     @Test
-    public void test_createBlockWithNullEndDate() {
+    void test_createBlockWithNullEndDate() {
         BlockRepository blockRepository = mock(BlockRepository.class);
         OverlapValidationService overlapService = mock(OverlapValidationService.class);
         BlockService blockService = new BlockService(blockRepository, overlapService);
@@ -130,7 +130,7 @@ public class BlockServiceTest {
     }
 
     @Test
-    public void test_createBlockWithNullOrEmptyReason() {
+    void test_createBlockWithNullOrEmptyReason() {
         BlockRepository blockRepository = mock(BlockRepository.class);
         OverlapValidationService overlapService = mock(OverlapValidationService.class);
         BlockService blockService = new BlockService(blockRepository, overlapService);
@@ -144,7 +144,7 @@ public class BlockServiceTest {
     }
 
     @Test
-    public void test_createBlockWithEndDateBeforeStartDate() {
+    void test_createBlockWithEndDateBeforeStartDate() {
         BlockRepository blockRepository = mock(BlockRepository.class);
         OverlapValidationService overlapService = mock(OverlapValidationService.class);
         BlockService blockService = new BlockService(blockRepository, overlapService);

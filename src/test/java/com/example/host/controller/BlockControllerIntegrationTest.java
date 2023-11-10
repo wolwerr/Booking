@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class BlockControllerIntegrationTest {
+class BlockControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -27,33 +27,35 @@ public class BlockControllerIntegrationTest {
     @Autowired
     private BlockRepository blockRepository;
 
+    String url = "/api/v1/blocks";
+
     @Test
-    public void shouldReturnAllBlocks() throws Exception {
-        this.mockMvc.perform(get("/api/blocks"))
+    void shouldReturnAllBlocks() throws Exception {
+        this.mockMvc.perform(get(url))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void shouldCreateBlock() throws Exception {
+    void shouldCreateBlock() throws Exception {
         String jsonRequest = "{\"startDate\":\"2021-01-01\",\"endDate\":\"2021-01-10\",\"reason\":\"Maintenance\"}";
 
-        this.mockMvc.perform(post("/api/blocks")
+        this.mockMvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    public void shouldDeleteBlock() throws Exception {
-        this.mockMvc.perform(delete("/api/blocks/1"))
+    void shouldDeleteBlock() throws Exception {
+        this.mockMvc.perform(delete(url + "/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void shouldNotAllowBlockStartDateAfterEndDate() throws Exception {
+    void shouldNotAllowBlockStartDateAfterEndDate() throws Exception {
         String jsonRequest = "{\"startDate\":\"2022-01-10\",\"endDate\":\"2022-01-05\",\"reason\":\"Event\"}";
 
-        this.mockMvc.perform(post("/api/blocks")
+        this.mockMvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isBadRequest());
@@ -62,7 +64,7 @@ public class BlockControllerIntegrationTest {
 
     @Test
     @Transactional
-    public void shouldNotAllowOverlappingDatesForBlock() throws Exception {
+    void shouldNotAllowOverlappingDatesForBlock() throws Exception {
         Block existingBlock = new Block();
         existingBlock.setStartDate(LocalDate.of(2022, 1, 1));
         existingBlock.setEndDate(LocalDate.of(2022, 1, 10));
@@ -71,7 +73,7 @@ public class BlockControllerIntegrationTest {
 
         String jsonRequest = "{\"startDate\":\"2022-01-05\",\"endDate\":\"2022-01-15\",\"reason\":\"Private Event\"}";
 
-        this.mockMvc.perform(post("/api/blocks")
+        this.mockMvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isConflict());
